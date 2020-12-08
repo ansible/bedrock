@@ -1,0 +1,7 @@
+docker.io:
+  images:
+    alpine: []
+    centos: []
+    fedora: []
+    # opensuse/leap: []
+    ubuntu: []

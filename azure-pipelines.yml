@@ -1,0 +1,24 @@
+schedules:
+  - cron: 0 42 * * *
+    displayName: Nightly Image Sync
+    always: true
+
+jobs:
+  - job: sync
+    displayName: Sync
+    steps:
+      - checkout: self
+      - script: >
+          set -eux
+          docker run --rm -t
+          -v $(pwd)/auth.json:/auth.json:ro
+          -v $(pwd)/images.yml:/images.yml:ro
+          quay.io/containers/skopeo:1.2.0
+          sync
+          --authfile /auth.json
+          --override-os linux
+          --src yaml
+          --dest docker
+          /images.yml
+          quay.io/bedrock
+        displayName: Base Images
