@@ -31,12 +31,12 @@ jobs:
 
       - script: >
           docker run --rm -t
-            -v $(pwd)/auth.json:/auth.json:ro
-            quay.io/containers/skopeo:1.2.0
-            sync
-            --authfile /auth.json
-            --src docker
-            --dest docker
-            docker.io/$(image)
-            quay.io/bedrock
+          -v $(pwd)/auth.json:/auth.json:ro
+          quay.io/containers/skopeo:1.2.0
+          sync
+          --authfile /auth.json
+          --src docker
+          --dest docker
+          docker.io/$(image)
+          quay.io/bedrock
         displayName: Image
