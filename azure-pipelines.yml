@@ -23,7 +23,7 @@ jobs:
           image: ubuntu
 
     steps:
-      - script: write-auth.py
+      - script: ./write-auth.py
         displayName: Create auth
         env:
           DOCKER_TOKEN: $(DOCKER_TOKEN)
