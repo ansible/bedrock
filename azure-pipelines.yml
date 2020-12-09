@@ -2,6 +2,9 @@ schedules:
   - cron: 42 0 * * *
     displayName: Nightly Image Sync
     always: true
+    branches:
+      include:
+        - main
 
 jobs:
   - job: sync
