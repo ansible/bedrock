@@ -1,5 +1,5 @@
 schedules:
-  - cron: 0 42 * * *
+  - cron: 42 0 * * *
     displayName: Nightly Image Sync
     always: true
 
@@ -8,16 +8,16 @@ jobs:
     displayName: Sync
     strategy:
       matrix:
-        Ubuntu:
-          image: ubuntu
-        Fedora:
-          image: fedora
-        openSUSE:
-          image: opensuse/leap
         Alpine:
           image: alpine
         CentOS:
           image: centos
+        Fedora:
+          image: fedora
+        openSUSE:
+          image: opensuse/leap
+        Ubuntu:
+          image: ubuntu
 
     steps:
       - script: write-auth.py
@@ -29,7 +29,6 @@ jobs:
       - script: >
           docker run --rm -t
             -v $(pwd)/auth.json:/auth.json:ro
-            -v $(pwd)/images.yml:/images.yml:ro
             quay.io/containers/skopeo:1.2.0
             sync
             --authfile /auth.json
