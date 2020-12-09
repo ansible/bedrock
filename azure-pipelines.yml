@@ -6,19 +6,35 @@ schedules:
 jobs:
   - job: sync
     displayName: Sync
+    strategy:
+      matrix:
+        Ubuntu:
+          image: ubuntu
+        Fedora:
+          image: fedora
+        openSUSE:
+          image: opensuse/leap
+        Alpine:
+          image: alpine
+        CentOS:
+          image: centos
+
     steps:
-      - checkout: self
+      - script: write-auth.py
+        displayName: Create auth
+        env:
+          DOCKER_TOKEN: $(DOCKER_TOKEN)
+          QUAY_TOKEN: $(QUAY_TOKEN)
+
       - script: >
-          set -eux
           docker run --rm -t
-          -v $(pwd)/auth.json:/auth.json:ro
-          -v $(pwd)/images.yml:/images.yml:ro
-          quay.io/containers/skopeo:1.2.0
-          sync
-          --authfile /auth.json
-          --override-os linux
-          --src yaml
-          --dest docker
-          /images.yml
-          quay.io/bedrock
-        displayName: Base Images
+            -v $(pwd)/auth.json:/auth.json:ro
+            -v $(pwd)/images.yml:/images.yml:ro
+            quay.io/containers/skopeo:1.2.0
+            sync
+            --authfile /auth.json
+            --src docker
+            --dest docker
+            docker.io/$(image)
+            quay.io/bedrock
+        displayName: Image
