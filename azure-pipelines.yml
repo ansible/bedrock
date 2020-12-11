@@ -17,14 +17,8 @@ jobs:
           image: centos
         Fedora:
           image: fedora
-        GoLang:
-          image: golang
-        Nginx:
-          image: nginx
         openSUSE:
           image: opensuse/leap
-        Python:
-          image: python
         Ubuntu:
           image: ubuntu
 
