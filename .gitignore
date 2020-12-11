@@ -1,1 +1,3 @@
 auth.json
+*.yml
+-azure-pipelines.yml
