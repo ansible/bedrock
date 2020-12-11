@@ -3,16 +3,22 @@
 import json
 import os
 
-data = {
-    "auths": {
-        "docker.io": {
-            "auth": os.environ['DOCKER_TOKEN']
-        },
-        "quay.io": {
-            "auth": os.environ['QUAY_TOKEN']
+
+def write_auth_file(file):
+    data = {
+        "auths": {
+            "docker.io": {
+                "auth": os.environ['DOCKER_TOKEN']
+            },
+            "quay.io": {
+                "auth": os.environ['QUAY_TOKEN']
+            }
         }
     }
-}
 
-with open('auth.json', 'w') as f:
-    json.dump(data, f, indent=4)
+    with open(file, 'w') as f:
+        json.dump(data, f, indent=4)
+
+
+if __name__ == '__main__':
+    write_auth_file('auth.json')
