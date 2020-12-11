@@ -40,3 +40,41 @@ jobs:
           docker.io/$(image)
           quay.io/bedrock
         displayName: Image
+
+  - job: sync_yaml
+    displayName: Sync Filtered
+    strategy:
+      matrix:
+        Python2:
+          image: python2
+        Python3:
+          image: python3
+        GoLang:
+          image: golang
+
+    steps:
+      - script: ./write-auth.py $(image)
+        displayName: Create auth
+        env:
+          DOCKER_USER: $(DOCKER_USER)
+          DOCKER_TOKEN: $(DOCKER_TOKEN)
+          QUAY_TOKEN: $(QUAY_TOKEN)
+
+      - script: ./write-yaml.py $(image)
+        displayName: Create YAML
+        env:
+          DOCKER_USER: $(DOCKER_USER)
+          DOCKER_PASSWORD: $(DOCKER_PASSWORD)
+
+      - script: >
+          docker run --rm -t
+          -v $(pwd)/auth.json:/auth.json:ro
+          -v $(pwd)/$(image).yml:/images.yml:ro
+          quay.io/containers/skopeo:v1.2.0
+          sync
+          --authfile /auth.json
+          --src yaml
+          --dest docker
+          /images.yml
+          quay.io/bedrock
+        displayName: Image
