@@ -6,8 +6,11 @@ import subprocess
 import sys
 
 """Copy an image from Docker Hub to Quay.io using skopeo. Skopeo can be run from
-a container or natively if it is installed. You be logged in to the necessary
+a container or natively if it is installed. You must be logged in to the necessary
 regstries or provide the path to a valid auth file.
+
+When using a container, an authfile must be provided which will be made available
+to the running container.
 """
 
 
