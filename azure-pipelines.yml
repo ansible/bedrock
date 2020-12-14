@@ -47,12 +47,12 @@ jobs:
     displayName: Sync Filtered
     strategy:
       matrix:
-        Python2:
-          image: python2
-        Python3:
-          image: python3
+        Python:
+          image: python
+          regexp: '^[0-9]+\.[^-]+$'
         GoLang:
           image: golang
+          regexp: '\d+-stretch'
 
     steps:
       - script: ./write-auth.py $(image)
@@ -67,6 +67,8 @@ jobs:
         env:
           DOCKER_USER: $(DOCKER_USER)
           DOCKER_PASSWORD: $(DOCKER_PASSWORD)
+          IMAGE: $(image)
+          REGEXP: '$(regexp)'
 
       - script: >
           docker run --rm -t
