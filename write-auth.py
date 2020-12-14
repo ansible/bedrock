@@ -4,7 +4,7 @@ import json
 import os
 
 
-def write_auth_file(file):
+def write_auth_file():
     data = {
         "auths": {
             "docker.io": {
@@ -16,9 +16,9 @@ def write_auth_file(file):
         }
     }
 
-    with open(file, 'w') as f:
+    with open('auth.json', 'w') as f:
         json.dump(data, f, indent=4)
 
 
 if __name__ == '__main__':
-    write_auth_file('auth.json')
+    write_auth_file()

@@ -1,21 +1,9 @@
 #!/usr/bin/env python
 
 import os
-import sys
 
 import yaml
 
-IMAGE_FILES = {
-    'python2': {
-        'python': r'^2\.[6-7](\.[0-9]+)?$',
-    },
-    'python3': {
-        'python': r'^3\.[6-9](\.[0-9]+)?$',
-    },
-    'golang': {
-        'golang': r'^1\.1[1-9]((\.[0-9]+)-alpine[0-9]+\.[0-9]+)?$',
-    },
-}
 
 CREDENTIALS = {
     'username': os.environ['DOCKER_USER'],
@@ -23,18 +11,19 @@ CREDENTIALS = {
 }
 
 
-def write_images_file(file):
+def write_images_file():
     data = {
         'docker.io': {
             'credentials': CREDENTIALS,
-            'images-by-tag-regex': IMAGE_FILES[file],
+            'images-by-tag-regex': {
+                os.environ['IMAGE']: os.environ['REGEXP'],
+            },
         }
     }
 
-    with open('%s.yml' % file, 'w') as f:
+    with open('images.yml', 'w') as f:
         yaml.dump(data, stream=f)
 
 
 if __name__ == '__main__':
-    file = sys.argv[1]
-    write_images_file(file)
+    write_images_file()

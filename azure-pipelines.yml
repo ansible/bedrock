@@ -62,7 +62,7 @@ jobs:
           DOCKER_TOKEN: $(DOCKER_TOKEN)
           QUAY_TOKEN: $(QUAY_TOKEN)
 
-      - script: ./write-yaml.py $(image)
+      - script: ./write-yaml.py
         displayName: Create YAML
         env:
           DOCKER_USER: $(DOCKER_USER)
@@ -71,7 +71,7 @@ jobs:
       - script: >
           docker run --rm -t
           -v $(pwd)/auth.json:/auth.json:ro
-          -v $(pwd)/$(image).yml:/images.yml:ro
+          -v $(pwd)/images.yml:/images.yml:ro
           quay.io/containers/skopeo:v1.2.0
           sync
           --authfile /auth.json
