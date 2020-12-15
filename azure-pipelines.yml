@@ -17,6 +17,8 @@ jobs:
           image: centos
         Fedora:
           image: fedora
+        Nginx:
+          image: nginx
         openSUSE:
           image: opensuse/leap
         Ubuntu:
