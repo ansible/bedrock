@@ -34,7 +34,7 @@ jobs:
       - script: >
           docker run --rm -t
           -v $(pwd)/auth.json:/auth.json:ro
-          quay.io/containers/skopeo:v1.2.0
+          quay.io/containers/skopeo:v1.2.3
           sync
           --authfile /auth.json
           --src docker
