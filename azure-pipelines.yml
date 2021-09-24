@@ -9,6 +9,8 @@ schedules:
 jobs:
   - job: sync
     displayName: Sync
+    pool:
+      vmImage: 'ubuntu-18.04'
     strategy:
       matrix:
         Alpine:

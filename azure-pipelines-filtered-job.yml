@@ -1,6 +1,8 @@
 # Job to sync repositories using a regexp to filter the tags
 - job: sync_yaml
   displayName: Sync Filtered
+  pool:
+    vmImage: 'ubuntu-18.04'
   strategy:
     matrix:
       Python:
