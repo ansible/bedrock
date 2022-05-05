@@ -34,7 +34,7 @@ def copy_image(args):
     dest_url = 'docker://quay.io/bedrock/%s' % args.image
     command = ['skopeo']
     if args.container:
-        skopeo_image = 'quay.io/containers/skopeo:v1.2.0'
+        skopeo_image = 'quay.io/skopeo/stable:v1.7.0'
         command = [args.container_runtime, 'run', '--rm', '-t']
 
         if args.authfile:
