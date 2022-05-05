@@ -41,6 +41,7 @@ jobs:
           --authfile /auth.json
           --src docker
           --dest docker
+          --all
           docker.io/$(image)
           quay.io/bedrock
         displayName: Image
