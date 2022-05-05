@@ -42,6 +42,7 @@ jobs:
           --src docker
           --dest docker
           --all
+          --keep-going
           docker.io/$(image)
           quay.io/bedrock
         displayName: Image
