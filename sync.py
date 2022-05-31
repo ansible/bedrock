@@ -6,7 +6,7 @@ import shlex
 import subprocess
 
 
-def main() -> None:
+def main():
     """Main entry point."""
     name = 'skopeo-sync'
     image = 'quay.io/skopeo/stable:v1.7.0'
@@ -30,7 +30,7 @@ def main() -> None:
         docker('rm', '-f', name)
 
 
-def docker(*args: str) -> None:
+def docker(*args: str):
     """Run a docker command."""
     cmd = ('docker',) + args
     print(f'==> {shlex.join(cmd)}')
