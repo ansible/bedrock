@@ -10,7 +10,7 @@ jobs:
   - job: sync
     displayName: Sync
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-22.04'
     strategy:
       matrix:
         Alpine:
