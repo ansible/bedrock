@@ -14,7 +14,7 @@ def write_images_file():
         }
     }
 
-    with open('images.yml', 'w') as f:
+    with open('sync.yml', 'w') as f:
         yaml.dump(data, stream=f)
 
 
