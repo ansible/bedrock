@@ -21,6 +21,7 @@ jobs:
           image: fedora
         Nginx:
           image: nginx
+          regex: "^(?!^nginx:1\\.19\\.0-alpine$).*$"  # nginx:1.19.0-alpine fails to sync
         openSUSE:
           image: opensuse/leap
         Ubuntu:
@@ -33,16 +34,20 @@ jobs:
           DOCKER_TOKEN: $(DOCKER_TOKEN)
           QUAY_TOKEN: $(QUAY_TOKEN)
 
+      - script: ./write-yaml.py
+        displayName: Create yaml
+
       - script: >
           docker run --rm -t
           -v $(pwd)/auth.json:/auth.json:ro
+          -v $(pwd)/sync.yaml:/sync.yaml:ro
           quay.io/skopeo/stable:v1.7.0
           sync
           --authfile /auth.json
-          --src docker
+          --src yaml
           --dest docker
           --all
           --keep-going
-          docker.io/$(image)
+          /sync.yaml
           quay.io/bedrock
         displayName: Image

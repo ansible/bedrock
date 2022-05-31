@@ -9,7 +9,7 @@ def write_images_file():
     data = {
         'docker.io': {
             'images-by-tag-regex': {
-                os.environ['IMAGE']: os.environ['REGEXP'],
+                os.environ['IMAGE']: os.environ.get('REGEX', '^.*$'),
             },
         }
     }
