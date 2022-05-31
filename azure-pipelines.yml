@@ -21,21 +21,15 @@ jobs:
           image: fedora
         Nginx:
           image: nginx
-          regex: "^(?!^nginx:1\\.19\\.0-alpine$).*$"  # nginx:1.19.0-alpine fails to sync
+          match: "^(?!^1\\.19\\.0-alpine$).*$"  # nginx:1.19.0-alpine fails to sync
         openSUSE:
           image: opensuse/leap
         Ubuntu:
           image: ubuntu
 
     steps:
-      - script: ./write-auth.py
-        displayName: Create auth
+      - script: ./sync.py docker.io/$(image) quay.io/bedrock --match "$(regex)"
+        displayName: Repo
         env:
           DOCKER_TOKEN: $(DOCKER_TOKEN)
           QUAY_TOKEN: $(QUAY_TOKEN)
-
-      - script: ./write-yaml.py
-        displayName: Create yaml
-
-      - script: ./sync.py
-        displayName: Image
