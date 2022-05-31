@@ -37,17 +37,5 @@ jobs:
       - script: ./write-yaml.py
         displayName: Create yaml
 
-      - script: >
-          docker run --rm -t
-          -v $(pwd)/auth.json:/auth.json:ro
-          -v $(pwd)/sync.yaml:/sync.yaml:ro
-          quay.io/skopeo/stable:v1.7.0
-          sync
-          --authfile /auth.json
-          --src yaml
-          --dest docker
-          --all
-          --keep-going
-          /sync.yaml
-          quay.io/bedrock
+      - script: ./sync.py
         displayName: Image
