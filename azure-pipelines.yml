@@ -12,7 +12,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-22.04'
     variables:
-      regex: ''
+      match: ''
     strategy:
       matrix:
         Alpine:
@@ -30,7 +30,7 @@ jobs:
           image: ubuntu
 
     steps:
-      - script: ./sync.py docker.io/$(image) quay.io/bedrock --match "$(regex)"
+      - script: ./sync.py docker.io/$(image) quay.io/bedrock --match "$(match)"
         displayName: Repo
         env:
           DOCKER_TOKEN: $(DOCKER_TOKEN)
