@@ -9,8 +9,11 @@ schedules:
 jobs:
   - job: sync
     displayName: Sync
+    timeoutInMinutes: 120
     pool:
-      vmImage: 'ubuntu-18.04'
+      vmImage: 'ubuntu-22.04'
+    variables:
+      match: ''
     strategy:
       matrix:
         Alpine:
@@ -21,28 +24,15 @@ jobs:
           image: fedora
         Nginx:
           image: nginx
+          match: "^(?!^1\\.19\\.0-alpine$).*$"  # nginx:1.19.0-alpine fails to sync
         openSUSE:
           image: opensuse/leap
         Ubuntu:
           image: ubuntu
 
     steps:
-      - script: ./write-auth.py
-        displayName: Create auth
+      - script: ./sync.py docker.io/$(image) quay.io/bedrock --match "$(match)"
+        displayName: Sync
         env:
           DOCKER_TOKEN: $(DOCKER_TOKEN)
           QUAY_TOKEN: $(QUAY_TOKEN)
-
-      - script: >
-          docker run --rm -t
-          -v $(pwd)/auth.json:/auth.json:ro
-          quay.io/skopeo/stable:v1.7.0
-          sync
-          --authfile /auth.json
-          --src docker
-          --dest docker
-          --all
-          --keep-going
-          docker.io/$(image)
-          quay.io/bedrock
-        displayName: Image
