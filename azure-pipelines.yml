@@ -9,7 +9,6 @@ schedules:
 jobs:
   - job: sync
     displayName: Sync
-    timeoutInMinutes: 120
     pool:
       vmImage: 'ubuntu-22.04'
     variables:
