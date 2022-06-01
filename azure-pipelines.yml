@@ -31,7 +31,7 @@ jobs:
 
     steps:
       - script: ./sync.py docker.io/$(image) quay.io/bedrock --match "$(match)"
-        displayName: Repo
+        displayName: Sync
         env:
           DOCKER_TOKEN: $(DOCKER_TOKEN)
           QUAY_TOKEN: $(QUAY_TOKEN)
