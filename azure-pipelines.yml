@@ -28,7 +28,7 @@ jobs:
           image: ubuntu
 
     steps:
-      - script: ./sync.py docker.io/$(image) quay.io/bedrock --match "$(regex)"
+      - script: ./sync.py docker.io/$(image) quay.io/bedrock --match "$[variables.regex]"
         displayName: Repo
         env:
           DOCKER_TOKEN: $(DOCKER_TOKEN)
