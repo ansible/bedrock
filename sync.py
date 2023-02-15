@@ -7,6 +7,7 @@ import argparse
 import dataclasses
 import json
 import os
+import pathlib
 import re
 import secrets
 import shlex
@@ -39,6 +40,10 @@ def main() -> None:
         pattern = re.compile(args.match)
         tags = list(filter(pattern.search, tags))
 
+    if args.skip_from:
+        skip_tags = set(pathlib.Path(args.skip_from).read_text().splitlines())
+        tags = list(tag for tag in tags if tag not in skip_tags)
+
     if args.list:
         print('\n'.join(tags))
         return
@@ -52,6 +57,7 @@ def sync_repository(source: Repository, destination: Repository, tags: list[str]
         'sync',
         '--src', 'yaml',
         '--dest', 'docker',
+        '--format', 'v2s2',
         '--authfile', AUTH_PATH,
         '--all',
         '--keep-going',
@@ -70,6 +76,7 @@ def parse_args() -> CliArgs:
     parser.add_argument('source', help='source repository')
     parser.add_argument('destination', help='destination organization')
     parser.add_argument('--match', help='tag regex to match')
+    parser.add_argument('--skip-from', help='file to read skip entries from')
     parser.add_argument('--list', action='store_true', help='list source tags without syncing')
 
     if argcomplete:
@@ -89,6 +96,7 @@ class CliArgs:
     destination: str
     match: str | None
     list: bool
+    skip_from: str | None
 
 
 @dataclasses.dataclass(frozen=True)
@@ -114,7 +122,7 @@ class Repository:
 def skopeo(*args: str, files: dict[str, str] | None = None, capture_output=False) -> subprocess.CompletedProcess:
     """Run the specified skopeo command and return the result."""
     container_name = f'skopeo-{secrets.token_hex(4)}'
-    image = 'quay.io/skopeo/stable:v1.7.0'
+    image = 'quay.io/skopeo/stable:v1.10.0'
     files = (files or {}).copy()
 
     with tempfile.NamedTemporaryFile(prefix='auth-', suffix='.json') as auth_file:
