@@ -24,14 +24,15 @@ jobs:
           image: fedora
         Nginx:
           image: nginx
-          match: "^(?!^1\\.19\\.0-alpine$).*$"  # nginx:1.19.0-alpine fails to sync
+          skip_from: skip/nginx.txt
         openSUSE:
           image: opensuse/leap
         Ubuntu:
           image: ubuntu
+          skip_from: skip/ubuntu.txt
 
     steps:
-      - script: ./sync.py docker.io/$(image) quay.io/bedrock --match "$(match)"
+      - script: ./sync.py docker.io/$(image) quay.io/bedrock --skip-from "$(skip_from)"
         displayName: Sync
         env:
           DOCKER_TOKEN: $(DOCKER_TOKEN)
