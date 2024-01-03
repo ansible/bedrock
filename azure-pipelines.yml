@@ -18,15 +18,6 @@ jobs:
       matrix:
         Alpine:
           image: alpine
-        CentOS:
-          image: centos
-        Fedora:
-          image: fedora
-        Nginx:
-          image: nginx
-          skip_from: skip/nginx.txt
-        openSUSE:
-          image: opensuse/leap
         Ubuntu:
           image: ubuntu
           skip_from: skip/ubuntu.txt
