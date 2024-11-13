@@ -12,6 +12,8 @@ jobs:
     timeoutInMinutes: 120
     pool:
       vmImage: 'ubuntu-22.04'
+    variables:
+      skip_from: ''
     strategy:
       matrix:
         Alpine:
