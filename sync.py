@@ -40,12 +40,22 @@ def main() -> None:
         pattern = re.compile(args.match)
         tags = list(filter(pattern.search, tags))
 
+    if args.new_tags_only:
+        source_repo_name = str(source).rsplit('/', maxsplit=1)[-1]
+        destination_repo = Repository.parse(f'{destination}/{source_repo_name}')
+        skip_tags = set(get_tags(destination_repo))
+        tags = list(tag for tag in tags if tag not in skip_tags)
+
     if args.skip_from:
         skip_tags = set(pathlib.Path(args.skip_from).read_text().splitlines())
         tags = list(tag for tag in tags if tag not in skip_tags)
 
     if args.list:
         print('\n'.join(tags))
+        return
+
+    if not tags:
+        print('No tags to sync.')
         return
 
     sync_repository(source, destination, tags)
@@ -77,6 +87,7 @@ def parse_args() -> CliArgs:
     parser.add_argument('destination', help='destination organization')
     parser.add_argument('--match', help='tag regex to match')
     parser.add_argument('--skip-from', help='file to read skip entries from')
+    parser.add_argument('--new-tags-only', action='store_true', help='only sync tags not at the destination')
     parser.add_argument('--list', action='store_true', help='list source tags without syncing')
 
     if argcomplete:
@@ -96,6 +107,7 @@ class CliArgs:
     destination: str
     match: str | None
     list: bool
+    new_tags_only: bool
     skip_from: str | None
 
 
@@ -156,15 +168,15 @@ def write_sync_yaml(path: str, repository: Repository, tags: list[str]) -> None:
 
 
 def write_auth_file(path: str):
+    token_map = {
+        "docker.io": "DOCKER_TOKEN",
+        "quay.io": "QUAY_TOKEN",
+    }
+
+    tokens = {site: os.environ.get(env_var) for site, env_var in token_map.items()}
+
     data = {
-        "auths": {
-            "docker.io": {
-                "auth": os.environ['DOCKER_TOKEN']
-            },
-            "quay.io": {
-                "auth": os.environ['QUAY_TOKEN']
-            }
-        }
+        "auths": {site: {"auth": token} for site, token in tokens.items() if token},
     }
 
     with open(path, 'w') as auth_file:
