@@ -12,18 +12,18 @@ jobs:
     timeoutInMinutes: 120
     pool:
       vmImage: 'ubuntu-22.04'
-    variables:
-      match: ''
     strategy:
       matrix:
         Alpine:
           image: alpine
+          match: ^\d+\.\d+\.\d+$
         Ubuntu:
           image: ubuntu
+          match: ^[a-z]+-\d{8}(\.\d+)?$
           skip_from: skip/ubuntu.txt
 
     steps:
-      - script: ./sync.py docker.io/$(image) quay.io/bedrock --skip-from "$(skip_from)"
+      - script: ./sync.py docker.io/$(image) quay.io/bedrock --new-tags-only --match '$(match)' --skip-from "$(skip_from)"
         displayName: Sync
         env:
           DOCKER_TOKEN: $(DOCKER_TOKEN)
