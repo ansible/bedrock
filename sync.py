@@ -164,15 +164,15 @@ def write_sync_yaml(path: str, repository: Repository, tags: list[str]) -> None:
 
 
 def write_auth_file(path: str):
+    token_map = {
+        "docker.io": "DOCKER_TOKEN",
+        "quay.io": "QUAY_TOKEN",
+    }
+
+    tokens = {site: os.environ.get(env_var) for site, env_var in token_map.items()}
+
     data = {
-        "auths": {
-            "docker.io": {
-                "auth": os.environ['DOCKER_TOKEN']
-            },
-            "quay.io": {
-                "auth": os.environ['QUAY_TOKEN']
-            }
-        }
+        "auths": {site: {"auth": token} for site, token in tokens.items() if token},
     }
 
     with open(path, 'w') as auth_file:
