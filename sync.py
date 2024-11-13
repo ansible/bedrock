@@ -54,6 +54,10 @@ def main() -> None:
         print('\n'.join(tags))
         return
 
+    if not tags:
+        print('No tags to sync.')
+        return
+
     sync_repository(source, destination, tags)
 
 
