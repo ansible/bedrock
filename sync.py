@@ -50,12 +50,9 @@ def main() -> None:
         skip_tags = set(pathlib.Path(args.skip_from).read_text().splitlines())
         tags = list(tag for tag in tags if tag not in skip_tags)
 
-    if args.list:
-        print('\n'.join(tags))
-        return
+    print(f'--> Found {len(tags)} tag(s) to sync:\n{"\n".join(tags)}')
 
-    if not tags:
-        print('No tags to sync.')
+    if args.list or not tags:
         return
 
     sync_repository(source, destination, tags)
