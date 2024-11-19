@@ -64,6 +64,7 @@ def sync_repository(source: Repository, destination: Repository, tags: list[str]
         'sync',
         '--src', 'yaml',
         '--dest', 'docker',
+        '--preserve-digests',
         '--authfile', AUTH_PATH,
         '--all',
         '--keep-going',
