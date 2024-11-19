@@ -50,7 +50,8 @@ def main() -> None:
         skip_tags = set(pathlib.Path(args.skip_from).read_text().splitlines())
         tags = list(tag for tag in tags if tag not in skip_tags)
 
-    print(f'--> Found {len(tags)} tag(s) to sync:\n{"\n".join(tags)}')
+    print(f'--> Found {len(tags)} tag(s) to sync:')
+    print("\n".join(tags))
 
     if args.list or not tags:
         return
