@@ -50,12 +50,10 @@ def main() -> None:
         skip_tags = set(pathlib.Path(args.skip_from).read_text().splitlines())
         tags = list(tag for tag in tags if tag not in skip_tags)
 
-    if args.list:
-        print('\n'.join(tags))
-        return
+    print(f'--> Found {len(tags)} tag(s) to sync:')
+    print("\n".join(tags))
 
-    if not tags:
-        print('No tags to sync.')
+    if args.list or not tags:
         return
 
     sync_repository(source, destination, tags)
@@ -67,7 +65,7 @@ def sync_repository(source: Repository, destination: Repository, tags: list[str]
         'sync',
         '--src', 'yaml',
         '--dest', 'docker',
-        '--format', 'v2s2',
+        '--preserve-digests',
         '--authfile', AUTH_PATH,
         '--all',
         '--keep-going',
@@ -134,7 +132,7 @@ class Repository:
 def skopeo(*args: str, files: dict[str, str] | None = None, capture_output=False) -> subprocess.CompletedProcess:
     """Run the specified skopeo command and return the result."""
     container_name = f'skopeo-{secrets.token_hex(4)}'
-    image = 'quay.io/skopeo/stable:v1.14.0'
+    image = 'quay.io/skopeo/stable:v1.16.1'
     files = (files or {}).copy()
 
     with tempfile.NamedTemporaryFile(prefix='auth-', suffix='.json') as auth_file:
