@@ -131,7 +131,7 @@ class Repository:
 def skopeo(*args: str, files: dict[str, str] | None = None, capture_output=False) -> subprocess.CompletedProcess:
     """Run the specified skopeo command and return the result."""
     container_name = f'skopeo-{secrets.token_hex(4)}'
-    image = 'quay.io/skopeo/stable:v1.14.0'
+    image = 'quay.io/skopeo/stable:v1.16.1'
     files = (files or {}).copy()
 
     with tempfile.NamedTemporaryFile(prefix='auth-', suffix='.json') as auth_file:
