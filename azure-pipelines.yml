@@ -25,8 +25,7 @@ jobs:
           skip_from: skip/ubuntu.txt
 
     steps:
-      - script: ./sync.py docker.io/$(image) quay.io/bedrock --new-tags-only --match '$(match)' --skip-from "$(skip_from)"
+      - script: ./sync.py public.ecr.aws/docker/library/$(image) quay.io/bedrock --new-tags-only --match '$(match)' --skip-from "$(skip_from)"
         displayName: Sync
         env:
-          DOCKER_TOKEN: $(DOCKER_TOKEN)
           QUAY_TOKEN: $(QUAY_TOKEN)
